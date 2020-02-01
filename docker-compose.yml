@@ -1,0 +1,26 @@
+version: '3'
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: ./server/Dockerfile
+    image: bts-server:1.0.0
+    depends_on:
+      - nginx
+      - mongo
+  webapp:
+    build:
+      context: ./webapp
+      dockerfile: ./webapp/Dockerfile
+    image: bts-webapp:1.0.0
+    depends_on:
+      - nginx
+      - server
+  nginx:
+    image: nginx:1.17.8
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  mongo:
+    image: mongo:4.2.3-bionic
+    volumes:
+      - ./db:/data/db
